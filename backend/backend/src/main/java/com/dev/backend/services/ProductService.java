@@ -1,9 +1,9 @@
 package com.dev.backend.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import com.dev.backend.models.entities.Product;
 import com.dev.backend.models.repositories.ProductRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * Class responsible for the application's service layer.

@@ -1,9 +1,7 @@
 package com.dev.backend.models.entities;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.util.UUID;
@@ -13,16 +11,12 @@ import org.hibernate.annotations.GenericGenerator;
 * Class responsible for parameterized attributes of the product table.
 */
 @Entity
-@Table(name = "product")
+@Table(name = "products")
 public class Product {
   @Id
   @GeneratedValue(generator = "uuid2")
   @GenericGenerator(name = "uuid2", strategy = "uuid2")
   private UUID id;
-
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "product_code") 
-  private Integer productCode;
 
   private String name;
 
@@ -37,14 +31,12 @@ public class Product {
    */
   public Product(
       UUID id,
-      Integer productCode,
       String name,
       String description,
       Double value,
       Boolean available
   ) {
     this.id = id;
-    this.productCode = productCode;
     this.name = name;
     this.description = description;
     this.value = value;
@@ -63,20 +55,6 @@ public class Product {
    */
   public void setId(UUID id) {
     this.id = id;
-  }
-
-  /**
-   * Method responsible for capturing the product code.
-   */
-  public Integer getProductCode() {
-    return productCode;
-  }
-
-  /**
-   * Method responsible for inserting the product code.
-   */
-  public void setProductCode(Integer productCode) {
-    this.productCode = productCode;
   }
 
   /**

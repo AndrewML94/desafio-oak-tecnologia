@@ -1,25 +1,33 @@
 version: "3.8"
 services:
+  mysqldb:
+    container_name: productdb
+    image: mysql:latest
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=13377331
+      - MYSQL_DATABASE=productdb
+    ports:
+      - 3306:3306
+    networks:
+      - my-network
   application:
-    container_name: app
-    build: .
+    container_name: backend-app
+    build:
+      context: ./
+      dockerfile: Dockerfile
     restart: always
     ports:
       - 8080:8080
     depends_on:
-      - mysql
-    environment:
-      - DATABASE_HOST=mysql
-      - DATABASE_PORT=3306
-      - DATABASE_USER=${DB_USER}
-      - DATABASE_PASSWORD=${DB_PASSWORD}
-      - DATABASE_NAME={DB_NAME}
-  mysql:
-    container_name: productdb
-    image: mysql:latest
-    restart: always
-    ports:
-      - 3306:3306
-    environment:
-      - MYSQL_ROOT_USERNAME=${DB_USER}
-      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+      - mysqldb
+    # environment:
+    #   - DATABASE_HOST=mysql
+    #   - DATABASE_PORT=3306
+    #   - DATABASE_USER=root
+    #   - DATABASE_PASSWORD=13377331
+    #   - DATABASE_NAME=productdb
+    networks:
+      - my-network
+networks:
+  my-network:
