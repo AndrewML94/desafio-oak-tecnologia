@@ -2,21 +2,19 @@ package com.dev.backend.models.entities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import java.util.UUID;
-import org.hibernate.annotations.GenericGenerator;
 
 /**
-* Class responsible for parameterized attributes of the product table.
-*/
+ * Class responsible for parameterized attributes of the product table.
+ */
 @Entity
 @Table(name = "products")
 public class Product {
   @Id
-  @GeneratedValue(generator = "uuid2")
-  @GenericGenerator(name = "uuid2", strategy = "uuid2")
-  private UUID id;
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Integer id;
 
   private String name;
 
@@ -26,34 +24,21 @@ public class Product {
 
   private Boolean available;
 
-  /**
-   * Class constructor method.
-   */
-  public Product(
-      UUID id,
-      String name,
-      String description,
-      Double value,
-      Boolean available
-  ) {
-    this.id = id;
-    this.name = name;
-    this.description = description;
-    this.value = value;
-    this.available = available;
+  public Product() {
+
   }
 
   /**
    * Method responsible for capturing the id.
    */
-  public UUID getId() {
+  public Integer getId() {
     return id;
   }
 
   /**
    * Method responsible for inserting the id.
    */
-  public void setId(UUID id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 
