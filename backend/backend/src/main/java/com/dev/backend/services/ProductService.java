@@ -1,10 +1,11 @@
 package com.dev.backend.services;
 
+import com.dev.backend.exception.ProductNotFoundException;
 import com.dev.backend.models.entities.Product;
 import com.dev.backend.models.repositories.ProductRepository;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 /**
@@ -32,14 +33,11 @@ public class ProductService {
   /**
    * Service layer method responsible for delete a product.
    */
-  public String deleteProduct(Integer id) {
-    try {
-      productRepository.deleteById(id);
-      return "Produto deletado com sucesso";
-    } catch (EmptyResultDataAccessException e) {
-      return "Produto não encontrado. A exclusão não foi realizada.";
-    } catch (Exception e) {
-      return "Ocorreu um erro ao excluir o produto.";
+  public void deleteProduct(Integer id) {
+    Optional<Product> product = productRepository.findById(id);
+
+    if (product.isEmpty()) {
+      throw new ProductNotFoundException();
     }
   }
 }

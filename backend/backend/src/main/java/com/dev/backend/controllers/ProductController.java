@@ -1,7 +1,9 @@
 package com.dev.backend.controllers;
 
+import com.dev.backend.exception.ProductNotFoundException;
 import com.dev.backend.models.entities.Product;
 import com.dev.backend.services.ProductService;
+import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,7 +27,7 @@ public class ProductController {
    * Application post method for creating a new product.
    */
   @PostMapping("/products")
-  public ResponseEntity<Product> createProduct(@RequestBody Product product) {
+  public ResponseEntity<Product> createProduct(@Valid @RequestBody Product product) {
     return ResponseEntity.status(HttpStatus.CREATED).body(productService.createProduct(product));
   }
 
@@ -36,7 +38,7 @@ public class ProductController {
   public ResponseEntity<List<Product>> getAllProducts() {
     List<Product> allProducts = productService.getAllProducts();
 
-    return ResponseEntity.status(HttpStatus.OK).body(allProducts);
+    return ResponseEntity.ok().body(allProducts);
   }
 
   /**
@@ -44,6 +46,12 @@ public class ProductController {
    */
   @DeleteMapping("/products/{id}")
   public ResponseEntity<String> deleteProduct(@PathVariable(value = "id") Integer id) {
-    return ResponseEntity.status(HttpStatus.OK).body(productService.deleteProduct(id));
+    try {
+      productService.deleteProduct(id);
+    } catch (ProductNotFoundException e) {
+      return ResponseEntity.notFound().build();
+    }
+
+    return ResponseEntity.noContent().build();
   }
 }

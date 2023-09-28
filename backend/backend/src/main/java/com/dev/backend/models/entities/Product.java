@@ -5,6 +5,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * Class responsible for parameterized attributes of the product table.
@@ -16,12 +18,16 @@ public class Product {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
 
+  @NotBlank
   private String name;
 
+  @NotBlank
   private String description;
 
+  @NotNull
   private Double value;
 
+  @NotNull
   private Boolean available;
 
   public Product() {
