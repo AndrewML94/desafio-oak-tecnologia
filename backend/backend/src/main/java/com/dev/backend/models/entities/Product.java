@@ -93,7 +93,7 @@ public class Product {
   /**
    * Method responsible for bringing product availability.
    */
-  public Boolean isAvailable() {
+  public Boolean getAvailable() {
     return available;
   }
 

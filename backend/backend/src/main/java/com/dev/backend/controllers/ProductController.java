@@ -1,6 +1,5 @@
 package com.dev.backend.controllers;
 
-import com.dev.backend.exception.ProductNotFoundException;
 import com.dev.backend.models.entities.Product;
 import com.dev.backend.services.ProductService;
 import jakarta.validation.Valid;
@@ -45,13 +44,9 @@ public class ProductController {
    * Application post method for delete a product.
    */
   @DeleteMapping("/products/{id}")
-  public ResponseEntity<String> deleteProduct(@PathVariable(value = "id") Integer id) {
-    try {
-      productService.deleteProduct(id);
-    } catch (ProductNotFoundException e) {
-      return ResponseEntity.notFound().build();
-    }
-
+  public ResponseEntity<?> deleteProduct(@PathVariable(value = "id") Integer id) {
+    productService.deleteProduct(id);
+    
     return ResponseEntity.noContent().build();
   }
 }
