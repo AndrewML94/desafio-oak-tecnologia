@@ -34,6 +34,27 @@ public class ProductService {
   }
 
   /**
+   * Service layer method responsible for update a product.
+   */
+  @Transactional
+  public Product updateProduct(Integer id, Product product) {
+    Optional<Product> productDb = productRepository.findById(id);
+
+    if (productDb.isEmpty()) {
+      throw new ProductNotFoundException();
+    }
+
+    Product updatedProduct = productDb.get();
+
+    updatedProduct.setName(product.getName());
+    updatedProduct.setDescription(product.getDescription());
+    updatedProduct.setValue(product.getValue());
+    updatedProduct.setAvailable(product.getAvailable());
+
+    return productRepository.save(updatedProduct);
+  }
+
+  /**
    * Service layer method responsible for delete a product.
    */
   @Transactional
