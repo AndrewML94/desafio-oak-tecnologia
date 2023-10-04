@@ -1,8 +1,13 @@
+import React from 'react';
+import Header from './components/Header';
+import CreateProduct from './components/CreateProduct';
+
 function App() {
   return (
-    <header>
-      <h1>Olá mundo!!!!!!</h1>
-    </header>
+    <div>
+      <Header />
+      <CreateProduct />
+    </div>
   );
 }
 
