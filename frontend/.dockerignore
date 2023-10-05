@@ -1,0 +1,27 @@
+# Arquivos e pastas específicos do projeto que não devem ser incluídos na imagem Docker
+node_modules
+build
+dist
+*.log
+*.yarn-*
+.yarn-cache
+.yarn-integrity
+coverage
+.cache
+.pnp.js
+yarn.lock
+package-lock.json
+
+# Arquivos que geralmente não são necessários em uma imagem Docker de produção
+Dockerfile
+docker-compose.yml
+README.md
+.git
+.gitignore
+
+# Arquivos e pastas específicos para ferramentas de desenvolvimento locais
+.editorconfig
+.eslintrc.json
+.prettierrc
+.vscode
+dev
