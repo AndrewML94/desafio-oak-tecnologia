@@ -1,45 +1,58 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+import { FetchProductContext } from '../context/FetchProductContext';
 
 function CreateProduct() {
   const [formData, setFormData] = useState({
-    productName: '',
-    productDescription: '',
-    productValue: 0,
-    productAvailable: false,
+    name: '',
+    description: '',
+    value: 0,
+    available: false,
   });
   const [errorMessage, setErrorMessage] = useState<string[]>([]);
+  const { postProduct } = useContext(FetchProductContext);
 
   const handleChange = ({ target }: any) => {
-    const { name, value } = target;
+    const { name, value, type, checked } = target;
+
+    let newValue: any;
+
+    if (name === 'value') {
+      newValue = parseFloat(value);
+    } else if (type === 'checkbox') {
+      newValue = checked;
+    } else {
+      newValue = value;
+    }
+
     setFormData((prevData) => (
       {
         ...prevData,
-        [name]: value,
+        [name]: newValue,
       }
     ));
   };
 
   const resetForm = () => {
     setFormData({
-      productName: '',
-      productDescription: '',
-      productValue: 0,
-      productAvailable: false,
+      name: '',
+      description: '',
+      value: 0,
+      available: false,
     });
   };
 
   const isFormValid = () => {
     const error = [];
 
-    if (formData.productName === '') {
+    if (formData.name === '') {
       error.push('O preenchimento do campo Nome do Produto é obrigatório!');
     }
 
-    if (formData.productDescription === '') {
+    if (formData.description === '') {
       error.push('O preenchimento do campo Descrição do Produto é obrigatório!');
     }
 
-    if (formData.productValue <= 0) {
+    if (formData.value <= 0) {
       error.push(
         'O preenchimento do campo Valor do Produto deve ser um número maior que zero!',
       );
@@ -52,8 +65,9 @@ function CreateProduct() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (isFormValid()) {
-      resetForm();
+      postProduct(formData);
       setErrorMessage([]);
+      resetForm();
     }
   };
 
@@ -62,43 +76,43 @@ function CreateProduct() {
       <form
         onSubmit={ handleSubmit }
       >
-        <label htmlFor="productName">
+        <label htmlFor="name">
           Nome do produto:
           <input
             type="text"
-            id="productName"
-            name="productName"
-            value={ formData.productName }
+            id="name"
+            name="name"
+            value={ formData.name }
             onChange={ handleChange }
           />
         </label>
-        <label htmlFor="productDescription">
+        <label htmlFor="description">
           Descrição do produto:
           <input
             type="text"
-            id="productDescription"
-            name="productDescription"
-            value={ formData.productDescription }
+            id="description"
+            name="description"
+            value={ formData.description }
             onChange={ handleChange }
           />
         </label>
-        <label htmlFor="productValue">
+        <label htmlFor="value">
           Valor do produto:
           <input
             type="number"
             step="0.01"
-            id="productValue"
-            name="productValue"
-            value={ formData.productValue }
+            id="value"
+            name="value"
+            value={ formData.value === 0 ? '' : formData.value }
             onChange={ handleChange }
           />
         </label>
-        <label htmlFor="productAvailable">
+        <label htmlFor="available">
           <input
             type="checkbox"
-            id="productAvailable"
-            name="productAvailable"
-            checked={ formData.productAvailable }
+            id="available"
+            name="available"
+            checked={ formData.available }
             onChange={ handleChange }
           />
           Disponível para a venda

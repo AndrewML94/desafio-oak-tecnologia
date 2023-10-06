@@ -1,7 +1,6 @@
-import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import ParentComponent from '../components/ParentComponent';
-import NotFound from './NotFound';
+import ParentComponent from './components/ParentComponent';
+import NotFound from './pages/NotFound';
 
 function App() {
   return (
