@@ -1,4 +1,3 @@
-import React from 'react';
 import heart from '../assets/heart.png';
 
 function Footer() {

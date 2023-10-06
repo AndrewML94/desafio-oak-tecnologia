@@ -1,5 +1,7 @@
 import { useContext, useEffect } from 'react';
 import { FetchProductContext } from '../context/FetchProductContext';
+import EditButton from './EditButton';
+import DeleteButton from './DeleteButton';
 
 function Table() {
   const { products, getProducts } = useContext(FetchProductContext);
@@ -29,6 +31,8 @@ function Table() {
                     <td>{ elem.description }</td>
                     <td>{ elem.value }</td>
                     <td>{ elem.available ? 'Sim' : 'Não' }</td>
+                    <EditButton />
+                    <DeleteButton />
                   </tr>
                 ))
               }
