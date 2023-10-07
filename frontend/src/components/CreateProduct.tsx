@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { FetchProductContext } from '../context/FetchProductContext';
 
-function CreateProduct() {
+function CreateProduct({ id }: any) {
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -9,7 +9,7 @@ function CreateProduct() {
     available: false,
   });
   const [errorMessage, setErrorMessage] = useState<string[]>([]);
-  const { postProduct } = useContext(FetchProductContext);
+  const { getProducts, postProduct, updateProduct } = useContext(FetchProductContext);
 
   const handleChange = ({ target }: any) => {
     const { name, value, type, checked } = target;
@@ -62,12 +62,16 @@ function CreateProduct() {
     return error.length === 0;
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (isFormValid()) {
-      postProduct(formData);
+      if (!id) await postProduct(formData);
+      if (id) await updateProduct(id, formData);
+
       setErrorMessage([]);
       resetForm();
+
+      await getProducts();
     }
   };
 
@@ -76,47 +80,39 @@ function CreateProduct() {
       <form
         onSubmit={ handleSubmit }
       >
-        <label htmlFor="name">
-          Nome do produto:
-          <input
-            type="text"
-            id="name"
-            name="name"
-            value={ formData.name }
-            onChange={ handleChange }
-          />
-        </label>
-        <label htmlFor="description">
-          Descrição do produto:
-          <input
-            type="text"
-            id="description"
-            name="description"
-            value={ formData.description }
-            onChange={ handleChange }
-          />
-        </label>
-        <label htmlFor="value">
-          Valor do produto:
-          <input
-            type="number"
-            step="0.01"
-            id="value"
-            name="value"
-            value={ formData.value === 0 ? '' : formData.value }
-            onChange={ handleChange }
-          />
-        </label>
-        <label htmlFor="available">
-          <input
-            type="checkbox"
-            id="available"
-            name="available"
-            checked={ formData.available }
-            onChange={ handleChange }
-          />
-          Disponível para a venda
-        </label>
+        <span>{'Nome do produto: '}</span>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          value={ formData.name }
+          onChange={ handleChange }
+        />
+        <span>{'Descrição do produto: '}</span>
+        <input
+          type="text"
+          id="description"
+          name="description"
+          value={ formData.description }
+          onChange={ handleChange }
+        />
+        <span>{'Valor do produto: '}</span>
+        <input
+          type="number"
+          step="0.01"
+          id="value"
+          name="value"
+          value={ formData.value === 0 ? '' : formData.value }
+          onChange={ handleChange }
+        />
+        <input
+          type="checkbox"
+          id="available"
+          name="available"
+          checked={ formData.available }
+          onChange={ handleChange }
+        />
+        <span>{' Disponível para a venda'}</span>
         {errorMessage.length > 0 && (
           <div>
             {
