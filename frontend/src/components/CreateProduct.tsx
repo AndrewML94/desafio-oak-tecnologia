@@ -1,45 +1,58 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+import { FetchProductContext } from '../context/FetchProductContext';
 
-function CreateProduct() {
+function CreateProduct({ id }: any) {
   const [formData, setFormData] = useState({
-    productName: '',
-    productDescription: '',
-    productValue: 0,
-    productAvailable: false,
+    name: '',
+    description: '',
+    value: 0,
+    available: false,
   });
   const [errorMessage, setErrorMessage] = useState<string[]>([]);
+  const { getProducts, postProduct, updateProduct } = useContext(FetchProductContext);
 
   const handleChange = ({ target }: any) => {
-    const { name, value } = target;
+    const { name, value, type, checked } = target;
+
+    let newValue: any;
+
+    if (name === 'value') {
+      newValue = parseFloat(value);
+    } else if (type === 'checkbox') {
+      newValue = checked;
+    } else {
+      newValue = value;
+    }
+
     setFormData((prevData) => (
       {
         ...prevData,
-        [name]: value,
+        [name]: newValue,
       }
     ));
   };
 
   const resetForm = () => {
     setFormData({
-      productName: '',
-      productDescription: '',
-      productValue: 0,
-      productAvailable: false,
+      name: '',
+      description: '',
+      value: 0,
+      available: false,
     });
   };
 
   const isFormValid = () => {
     const error = [];
 
-    if (formData.productName === '') {
+    if (formData.name === '') {
       error.push('O preenchimento do campo Nome do Produto é obrigatório!');
     }
 
-    if (formData.productDescription === '') {
+    if (formData.description === '') {
       error.push('O preenchimento do campo Descrição do Produto é obrigatório!');
     }
 
-    if (formData.productValue <= 0) {
+    if (formData.value <= 0) {
       error.push(
         'O preenchimento do campo Valor do Produto deve ser um número maior que zero!',
       );
@@ -49,11 +62,16 @@ function CreateProduct() {
     return error.length === 0;
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (isFormValid()) {
-      resetForm();
+      if (!id) await postProduct(formData);
+      if (id) await updateProduct(id, formData);
+
       setErrorMessage([]);
+      resetForm();
+
+      await getProducts();
     }
   };
 
@@ -62,47 +80,39 @@ function CreateProduct() {
       <form
         onSubmit={ handleSubmit }
       >
-        <label htmlFor="productName">
-          Nome do produto:
-          <input
-            type="text"
-            id="productName"
-            name="productName"
-            value={ formData.productName }
-            onChange={ handleChange }
-          />
-        </label>
-        <label htmlFor="productDescription">
-          Descrição do produto:
-          <input
-            type="text"
-            id="productDescription"
-            name="productDescription"
-            value={ formData.productDescription }
-            onChange={ handleChange }
-          />
-        </label>
-        <label htmlFor="productValue">
-          Valor do produto:
-          <input
-            type="number"
-            step="0.01"
-            id="productValue"
-            name="productValue"
-            value={ formData.productValue }
-            onChange={ handleChange }
-          />
-        </label>
-        <label htmlFor="productAvailable">
-          <input
-            type="checkbox"
-            id="productAvailable"
-            name="productAvailable"
-            checked={ formData.productAvailable }
-            onChange={ handleChange }
-          />
-          Disponível para a venda
-        </label>
+        <span>{'Nome do produto: '}</span>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          value={ formData.name }
+          onChange={ handleChange }
+        />
+        <span>{'Descrição do produto: '}</span>
+        <input
+          type="text"
+          id="description"
+          name="description"
+          value={ formData.description }
+          onChange={ handleChange }
+        />
+        <span>{'Valor do produto: '}</span>
+        <input
+          type="number"
+          step="0.01"
+          id="value"
+          name="value"
+          value={ formData.value === 0 ? '' : formData.value }
+          onChange={ handleChange }
+        />
+        <input
+          type="checkbox"
+          id="available"
+          name="available"
+          checked={ formData.available }
+          onChange={ handleChange }
+        />
+        <span>{' Disponível para a venda'}</span>
         {errorMessage.length > 0 && (
           <div>
             {

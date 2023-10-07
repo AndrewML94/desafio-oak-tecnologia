@@ -1,12 +1,14 @@
-import React from 'react';
-import Header from './components/Header';
-import CreateProduct from './components/CreateProduct';
+import { Routes, Route } from 'react-router-dom';
+import ParentComponent from './components/ParentComponent';
+import NotFound from './pages/NotFound';
 
 function App() {
   return (
     <div>
-      <Header />
-      <CreateProduct />
+      <Routes>
+        <Route path="/" element={ <ParentComponent /> } />
+        <Route path="/*" element={ <NotFound /> } />
+      </Routes>
     </div>
   );
 }
