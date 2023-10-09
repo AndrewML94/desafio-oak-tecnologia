@@ -1,10 +1,15 @@
-import heart from '../assets/heart.png';
+import '../styles/index.css';
 
 function Footer() {
   return (
-    <footer>
-      <p>Desenvolvido para concluir desafio de estágio da empresa Oak Tecnologia.</p>
-      <img src={ heart } alt="Coração vermelho" />
+    <footer className="header footer mt-auto">
+      <div className="container text-center">
+        <span className="title">
+          Desenvolvido para concluir desafio de estágio da empresa
+          {' '}
+          <a href="https://www.oaktecnologia.com/" target="_blank" rel="noreferrer"> Oak Tecnologia.</a>
+        </span>
+      </div>
     </footer>
   );
 }

@@ -5,7 +5,7 @@ import Table from './Table';
 
 function ParentComponent() {
   return (
-    <div>
+    <div className="container-main">
       <Header />
       <CreateProduct />
       <Table />

@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-max-depth */
 import React, { useContext, useEffect, useState } from 'react';
 import { Store } from 'react-notifications-component';
 import { FetchProductContext } from '../context/FetchProductContext';
@@ -48,17 +49,17 @@ function Table() {
       })}
       {
         products.length === 0 ? <p>Nenhum produto cadastrado</p> : (
-          <table>
+          <table className="table table-striped table-hover container mt-5">
             <thead>
               <tr>
-                <th>Nome do Produto</th>
-                <th>Descrição</th>
-                <th>Valor</th>
-                <th>Disponível</th>
-                <th>Editar / Excluir</th>
+                <th scope="col" className="col-3">Nome do Produto</th>
+                <th scope="col" className="col-5">Descrição</th>
+                <th scope="col" className="col-1">Valor</th>
+                <th scope="col" className="col-1">Disponível</th>
+                <th scope="col" className="col-4">Editar / Excluir</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="table-group-divider">
               {
                 products.map((elem) => (
                   <React.Fragment key={ elem.id }>
@@ -67,16 +68,20 @@ function Table() {
                       <td>{elem.description}</td>
                       <td>{elem.value}</td>
                       <td>{elem.available ? 'Sim' : 'Não'}</td>
-                      <td>
+                      <td className="opt-buttons">
                         <button
                           onClick={ () => handleButton(elem.id) }
+                          className="optionButton"
                         >
                           <img
                             src={ editProduct }
                             alt="Botão com um lápis referente a editar um produto"
                           />
                         </button>
-                        <button onClick={ () => handleDelete(elem.id) }>
+                        <button
+                          onClick={ () => handleDelete(elem.id) }
+                          className="optionButton"
+                        >
                           <img
                             src={ deleteProductImg }
                             alt="Botão com a letra X referente a deletar um produto"
@@ -87,15 +92,12 @@ function Table() {
                     {
                       isClicked && elem.id === isId && (
                         <tr>
-                          <td>
-                            <CreateProduct id={ elem.id } />
-                          </td>
-                          <td>
-                            <button
-                              onClick={ () => setIsClicked(!isClicked) }
-                            >
-                              Fechar edição
-                            </button>
+                          <td colSpan={ 3 }>
+                            <CreateProduct
+                              id={ elem.id }
+                              setIsClicked={ setIsClicked }
+                              isClicked={ isClicked }
+                            />
                           </td>
                         </tr>
                       )
