@@ -61,12 +61,17 @@ function Table() {
             </thead>
             <tbody className="table-group-divider">
               {
-                products.map((elem) => (
+                products.sort((a, b) => a.value - b.value).map((elem) => (
                   <React.Fragment key={ elem.id }>
                     <tr>
                       <td>{elem.name}</td>
                       <td>{elem.description}</td>
-                      <td>{elem.value}</td>
+                      <td>
+                        {elem.value
+                          .toLocaleString('pt-br', {
+                            style: 'currency', currency: 'BRL',
+                          })}
+                      </td>
                       <td>{elem.available ? 'Sim' : 'Não'}</td>
                       <td className="opt-buttons">
                         <button
