@@ -2,6 +2,7 @@ import { createContext, useMemo, useState } from 'react';
 import axios from 'axios';
 
 const URL = 'http://localhost:8080';
+const UNKNOWN_MESSAGE = 'Ocorreu um erro desconhecido.';
 
 type ProductInfo = {
   name: string,
@@ -12,6 +13,7 @@ type ProductInfo = {
 
 interface GetContextType {
   products: any[];
+  messageError: string;
   getProducts: () => Promise<void>;
   postProduct: (product:ProductInfo) => Promise<void>;
   updateProduct: (id: number, product:ProductInfo) => Promise<void>;
@@ -20,6 +22,7 @@ interface GetContextType {
 
 const initialContextValue: GetContextType = {
   products: [],
+  messageError: '',
   getProducts: async () => {},
   postProduct: async () => {},
   updateProduct: async () => {},
@@ -30,28 +33,29 @@ export const FetchProductContext = createContext<GetContextType>(initialContextV
 
 function FetchProductProvider({ children }: any) {
   const [products, setproducts] = useState([]);
+  const [messageError, setMessageError] = useState('');
 
   const getProducts = async () => {
     try {
       const response = await axios.get(URL);
       setproducts(response.data);
-    } catch (error) {
-      console.log('Erro em devolver todos os produtos!');
+    } catch (error: any) {
+      const { response } = error;
+      setMessageError(response.data.message || UNKNOWN_MESSAGE);
     }
   };
 
   const postProduct = async (product: ProductInfo) => {
     try {
-      const response = await axios.post(URL, {
+      await axios.post(URL, {
         name: product.name,
         description: product.description,
         value: product.value,
         available: product.available,
       });
-      console.log(response.data);
-      // setproducts(response.data);
-    } catch (error) {
-      console.log('Erro ao cadastrar o produto!');
+    } catch (error: any) {
+      const { response } = error;
+      setMessageError(response.data.message || UNKNOWN_MESSAGE);
     }
   };
 
@@ -63,26 +67,29 @@ function FetchProductProvider({ children }: any) {
         value: product.value,
         available: product.available,
       });
-    } catch (error) {
-      console.log('Produto não encontrado!');
+    } catch (error: any) {
+      const { response } = error;
+      setMessageError(response.data.message);
     }
   };
 
   const deleteProduct = async (id: number) => {
     try {
       await axios.delete(`${URL}/${id}`);
-    } catch (error) {
-      console.log('Produto não encontrado!');
+    } catch (error: any) {
+      const { response } = error;
+      setMessageError(response.data.message || UNKNOWN_MESSAGE);
     }
   };
 
   const contextValue = useMemo(() => ({
     products,
+    messageError,
     getProducts,
     postProduct,
     updateProduct,
     deleteProduct,
-  }), [products]);
+  }), [products, messageError]);
 
   return (
     <FetchProductContext.Provider value={ contextValue }>
